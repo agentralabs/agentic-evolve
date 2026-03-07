@@ -26,7 +26,9 @@ impl PatternExtractor {
         let mut patterns = Vec::new();
 
         for func in functions {
-            let variables = self.variable_detector.detect(&func.body, &execution.language);
+            let variables = self
+                .variable_detector
+                .detect(&func.body, &execution.language);
             let template = self.template_generator.generate(&func.body, &variables);
             let confidence = self.confidence_calculator.calculate(execution);
 
@@ -54,7 +56,11 @@ impl PatternExtractor {
         Ok(patterns)
     }
 
-    fn extract_functions(&self, code: &str, language: &Language) -> EvolveResult<Vec<ExtractedFunction>> {
+    fn extract_functions(
+        &self,
+        code: &str,
+        language: &Language,
+    ) -> EvolveResult<Vec<ExtractedFunction>> {
         match language {
             Language::Rust => self.extract_rust_functions(code),
             Language::Python => self.extract_python_functions(code),
@@ -65,15 +71,18 @@ impl PatternExtractor {
     fn extract_rust_functions(&self, code: &str) -> EvolveResult<Vec<ExtractedFunction>> {
         let mut functions = Vec::new();
         let re = regex::Regex::new(
-            r"(?m)^(\s*)(pub\s+)?(async\s+)?fn\s+(\w+)\s*(\([^)]*\))\s*(->\s*[^{]+)?\s*\{"
-        ).map_err(|e| EvolveError::CrystallizationError(e.to_string()))?;
+            r"(?m)^(\s*)(pub\s+)?(async\s+)?fn\s+(\w+)\s*(\([^)]*\))\s*(->\s*[^{]+)?\s*\{",
+        )
+        .map_err(|e| EvolveError::CrystallizationError(e.to_string()))?;
 
         for cap in re.captures_iter(code) {
             let is_pub = cap.get(2).is_some();
             let is_async = cap.get(3).is_some();
             let name = cap[4].to_string();
             let params_str = &cap[5];
-            let return_type = cap.get(6).map(|m| m.as_str().trim_start_matches("->").trim().to_string());
+            let return_type = cap
+                .get(6)
+                .map(|m| m.as_str().trim_start_matches("->").trim().to_string());
 
             // Extract body (simple brace counting)
             let fn_start = cap.get(0).map(|m| m.end()).unwrap_or(0);
@@ -87,7 +96,11 @@ impl PatternExtractor {
                 return_type,
                 body,
                 is_async,
-                visibility: if is_pub { Visibility::Public } else { Visibility::Private },
+                visibility: if is_pub {
+                    Visibility::Public
+                } else {
+                    Visibility::Private
+                },
             });
         }
 
@@ -97,8 +110,9 @@ impl PatternExtractor {
     fn extract_python_functions(&self, code: &str) -> EvolveResult<Vec<ExtractedFunction>> {
         let mut functions = Vec::new();
         let re = regex::Regex::new(
-            r"(?m)^(\s*)(async\s+)?def\s+(\w+)\s*\(([^)]*)\)\s*(?:->\s*([^:]+))?\s*:"
-        ).map_err(|e| EvolveError::CrystallizationError(e.to_string()))?;
+            r"(?m)^(\s*)(async\s+)?def\s+(\w+)\s*\(([^)]*)\)\s*(?:->\s*([^:]+))?\s*:",
+        )
+        .map_err(|e| EvolveError::CrystallizationError(e.to_string()))?;
 
         for cap in re.captures_iter(code) {
             let indent = cap[1].len();
@@ -186,7 +200,8 @@ fn extract_indented_body(code: &str, start: usize, base_indent: usize) -> String
 
 fn parse_rust_params(params_str: &str) -> Vec<ParamSignature> {
     let inner = params_str.trim_start_matches('(').trim_end_matches(')');
-    inner.split(',')
+    inner
+        .split(',')
         .filter_map(|p| {
             let p = p.trim();
             if p.is_empty() || p == "&self" || p == "&mut self" || p == "self" {
@@ -207,7 +222,8 @@ fn parse_rust_params(params_str: &str) -> Vec<ParamSignature> {
 }
 
 fn parse_python_params(params_str: &str) -> Vec<ParamSignature> {
-    params_str.split(',')
+    params_str
+        .split(',')
         .filter_map(|p| {
             let p = p.trim();
             if p.is_empty() || p == "self" || p == "cls" {
@@ -216,12 +232,21 @@ fn parse_python_params(params_str: &str) -> Vec<ParamSignature> {
             let parts: Vec<&str> = p.splitn(2, ':').collect();
             let name = parts[0].trim().to_string();
             let param_type = if parts.len() > 1 {
-                parts[1].split('=').next().unwrap_or("Any").trim().to_string()
+                parts[1]
+                    .split('=')
+                    .next()
+                    .unwrap_or("Any")
+                    .trim()
+                    .to_string()
             } else {
                 "Any".to_string()
             };
             let is_optional = p.contains('=');
-            Some(ParamSignature { name, param_type, is_optional })
+            Some(ParamSignature {
+                name,
+                param_type,
+                is_optional,
+            })
         })
         .collect()
 }

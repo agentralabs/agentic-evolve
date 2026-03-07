@@ -241,7 +241,9 @@ mod tests {
         state.add(4);
         let result = state.changes_since_version(1);
         match result {
-            DeltaResult::Changed { items, to_version, .. } => {
+            DeltaResult::Changed {
+                items, to_version, ..
+            } => {
                 assert_eq!(items.len(), 1);
                 assert_eq!(items[0], 4);
                 assert_eq!(to_version, 2);

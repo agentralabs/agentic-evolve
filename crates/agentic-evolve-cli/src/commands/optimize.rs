@@ -93,10 +93,7 @@ pub fn run(args: OptimizeArgs, data_dir: &str, json: bool) -> Result<()> {
                     prunable.len()
                 );
                 for p in &prunable {
-                    println!(
-                        "  {} - {} (confidence: {:.2})",
-                        p.id, p.name, p.confidence
-                    );
+                    println!("  {} - {} (confidence: {:.2})", p.id, p.name, p.confidence);
                 }
             }
         }

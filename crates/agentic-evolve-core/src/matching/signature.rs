@@ -34,7 +34,12 @@ impl SignatureMatcher {
             .filter(|r| r.score.combined > 0.0)
             .collect();
 
-        results.sort_by(|a, b| b.score.combined.partial_cmp(&a.score.combined).unwrap_or(std::cmp::Ordering::Equal));
+        results.sort_by(|a, b| {
+            b.score
+                .combined
+                .partial_cmp(&a.score.combined)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        });
         results.truncate(limit);
         Ok(results)
     }
@@ -55,7 +60,8 @@ impl SignatureMatcher {
         factors += 1;
 
         // Parameter count similarity
-        let param_diff = (pattern.signature.params.len() as i32 - signature.params.len() as i32).unsigned_abs();
+        let param_diff =
+            (pattern.signature.params.len() as i32 - signature.params.len() as i32).unsigned_abs();
         let param_score = if param_diff == 0 {
             1.0
         } else {
@@ -122,11 +128,19 @@ fn levenshtein_distance(a: &str, b: &str) -> usize {
     let m = a_chars.len();
     let n = b_chars.len();
     let mut dp = vec![vec![0usize; n + 1]; m + 1];
-    for (i, row) in dp.iter_mut().enumerate().take(m + 1) { row[0] = i; }
-    for j in 0..=n { dp[0][j] = j; }
+    for (i, row) in dp.iter_mut().enumerate().take(m + 1) {
+        row[0] = i;
+    }
+    for j in 0..=n {
+        dp[0][j] = j;
+    }
     for i in 1..=m {
         for j in 1..=n {
-            let cost = if a_chars[i - 1] == b_chars[j - 1] { 0 } else { 1 };
+            let cost = if a_chars[i - 1] == b_chars[j - 1] {
+                0
+            } else {
+                1
+            };
             dp[i][j] = (dp[i - 1][j] + 1)
                 .min(dp[i][j - 1] + 1)
                 .min(dp[i - 1][j - 1] + cost);

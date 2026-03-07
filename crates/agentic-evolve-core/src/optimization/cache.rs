@@ -54,9 +54,8 @@ impl CacheManager {
     }
 
     pub fn invalidate_pattern(&mut self, pattern_id: &str) {
-        self.cache.retain(|_, entries| {
-            !entries.iter().any(|e| e.pattern_id == pattern_id)
-        });
+        self.cache
+            .retain(|_, entries| !entries.iter().any(|e| e.pattern_id == pattern_id));
     }
 
     pub fn clear(&mut self) {
@@ -68,18 +67,28 @@ impl CacheManager {
     }
 
     pub fn hit_rate(&self) -> f64 {
-        let total_hits: u64 = self.cache.values()
+        let total_hits: u64 = self
+            .cache
+            .values()
             .flat_map(|entries| entries.iter())
             .map(|e| e.hit_count)
             .sum();
-        let total_entries: u64 = self.cache.values()
+        let total_entries: u64 = self
+            .cache
+            .values()
             .map(|entries| entries.len() as u64)
             .sum();
-        if total_entries == 0 { 0.0 } else { total_hits as f64 / total_entries as f64 }
+        if total_entries == 0 {
+            0.0
+        } else {
+            total_hits as f64 / total_entries as f64
+        }
     }
 
     fn evict_oldest(&mut self) {
-        if let Some(oldest_key) = self.cache.iter()
+        if let Some(oldest_key) = self
+            .cache
+            .iter()
             .min_by_key(|(_, entries)| entries.first().map(|e| e.timestamp).unwrap_or(i64::MAX))
             .map(|(k, _)| k.clone())
         {

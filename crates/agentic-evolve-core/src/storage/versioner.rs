@@ -49,7 +49,9 @@ impl PatternVersioner {
     }
 
     pub fn get_version(&self, pattern_id: &str, version: u32) -> EvolveResult<&VersionEntry> {
-        let entries = self.history.get(pattern_id)
+        let entries = self
+            .history
+            .get(pattern_id)
             .ok_or_else(|| EvolveError::PatternNotFound(pattern_id.to_string()))?;
         entries
             .iter()

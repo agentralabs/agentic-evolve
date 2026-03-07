@@ -9,19 +9,9 @@ use crate::session::SessionManager;
 use crate::types::{McpError, McpResult, ToolCallResult, ToolDefinition};
 
 use super::{
-    evolve_compose,
-    evolve_confidence,
-    evolve_coverage,
-    evolve_crystallize,
-    evolve_get_body,
-    evolve_match_context,
-    evolve_match_signature,
-    evolve_optimize,
-    evolve_pattern_delete,
-    evolve_pattern_get,
-    evolve_pattern_list,
-    evolve_pattern_search,
-    evolve_pattern_store,
+    evolve_compose, evolve_confidence, evolve_coverage, evolve_crystallize, evolve_get_body,
+    evolve_match_context, evolve_match_signature, evolve_optimize, evolve_pattern_delete,
+    evolve_pattern_get, evolve_pattern_list, evolve_pattern_search, evolve_pattern_store,
     evolve_update_usage,
 };
 

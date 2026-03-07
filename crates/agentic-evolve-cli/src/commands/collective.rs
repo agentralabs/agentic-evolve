@@ -60,9 +60,7 @@ pub fn run_usage(args: UsageArgs, data_dir: &str, json: bool) -> Result<()> {
                     })
                 );
             } else {
-                println!(
-                    "Updated usage for pattern {id} (success={success})"
-                );
+                println!("Updated usage for pattern {id} (success={success})");
             }
         }
         UsageCommand::Top { limit } => {
@@ -76,7 +74,10 @@ pub fn run_usage(args: UsageArgs, data_dir: &str, json: bool) -> Result<()> {
             } else {
                 println!("Top {} patterns by usage:", sorted.len());
                 for p in &sorted {
-                    println!("  {} - {} uses (confidence: {:.2})", p.name, p.usage_count, p.confidence);
+                    println!(
+                        "  {} - {} uses (confidence: {:.2})",
+                        p.name, p.usage_count, p.confidence
+                    );
                 }
             }
         }
@@ -91,7 +92,10 @@ pub fn run_usage(args: UsageArgs, data_dir: &str, json: bool) -> Result<()> {
             } else {
                 println!("Bottom {} patterns by usage:", sorted.len());
                 for p in &sorted {
-                    println!("  {} - {} uses (confidence: {:.2})", p.name, p.usage_count, p.confidence);
+                    println!(
+                        "  {} - {} uses (confidence: {:.2})",
+                        p.name, p.usage_count, p.confidence
+                    );
                 }
             }
         }

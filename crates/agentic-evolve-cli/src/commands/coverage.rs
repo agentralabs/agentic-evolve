@@ -59,17 +59,18 @@ pub fn run(args: CoverageArgs, data_dir: &str, json: bool) -> Result<()> {
                 );
                 for d in &report.details {
                     let status = if d.covered { "+" } else { "-" };
-                    println!("  [{status}] {} (score: {:.3})", d.function_name, d.best_match_score);
+                    println!(
+                        "  [{status}] {} (score: {:.3})",
+                        d.function_name, d.best_match_score
+                    );
                 }
             }
         }
         CoverageCommand::Summary { threshold } => {
             // Summary across all stored patterns
             let patterns = session.list_patterns();
-            let signatures: Vec<FunctionSignature> = patterns
-                .iter()
-                .map(|p| p.signature.clone())
-                .collect();
+            let signatures: Vec<FunctionSignature> =
+                patterns.iter().map(|p| p.signature.clone()).collect();
             let report = session.coverage(&signatures, threshold);
 
             if json {

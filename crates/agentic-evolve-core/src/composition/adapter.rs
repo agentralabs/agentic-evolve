@@ -17,10 +17,16 @@ impl AdapterGenerator {
         source: &Pattern,
         target: &Pattern,
     ) -> EvolveResult<AdapterCode> {
-        let needs_type_conversion = source.signature.return_type != target.signature.params.first().map(|p| p.param_type.clone());
+        let needs_type_conversion = source.signature.return_type
+            != target
+                .signature
+                .params
+                .first()
+                .map(|p| p.param_type.clone());
         let needs_async_bridge = source.signature.is_async != target.signature.is_async;
 
-        let code = self.build_adapter_code(source, target, needs_type_conversion, needs_async_bridge);
+        let code =
+            self.build_adapter_code(source, target, needs_type_conversion, needs_async_bridge);
 
         Ok(AdapterCode {
             code,

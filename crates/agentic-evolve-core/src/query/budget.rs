@@ -54,7 +54,11 @@ impl TokenBudget {
     /// Utilization ratio in `[0.0, 1.0+]` (can exceed 1.0 if overspent).
     pub fn utilization(&self) -> f64 {
         if self.max_tokens == 0 {
-            return if self.used_tokens == 0 { 0.0 } else { f64::INFINITY };
+            return if self.used_tokens == 0 {
+                0.0
+            } else {
+                f64::INFINITY
+            };
         }
         self.used_tokens as f64 / self.max_tokens as f64
     }

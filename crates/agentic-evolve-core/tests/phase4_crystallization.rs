@@ -9,7 +9,12 @@ use agentic_evolve_core::crystallization::variable_detector::VariableDetector;
 use agentic_evolve_core::types::pattern::{Language, PatternVariable};
 use agentic_evolve_core::types::skill::{SuccessfulExecution, TestResult};
 
-fn make_execution(code: &str, lang: Language, tests: Vec<TestResult>, time_ms: u64) -> SuccessfulExecution {
+fn make_execution(
+    code: &str,
+    lang: Language,
+    tests: Vec<TestResult>,
+    time_ms: u64,
+) -> SuccessfulExecution {
     SuccessfulExecution {
         code: code.to_string(),
         language: lang,
@@ -43,17 +48,19 @@ fn helper() {
     println!("helper");
 }
 "#;
-    let exec = make_execution(
-        code,
-        Language::Rust,
-        vec![make_test("test_add", true)],
-        50,
-    );
+    let exec = make_execution(code, Language::Rust, vec![make_test("test_add", true)], 50);
     let patterns = extractor.extract(&exec).unwrap();
-    assert!(!patterns.is_empty(), "Should extract at least one Rust function");
+    assert!(
+        !patterns.is_empty(),
+        "Should extract at least one Rust function"
+    );
     // Should find "add" and "helper"
     let names: Vec<&str> = patterns.iter().map(|p| p.name.as_str()).collect();
-    assert!(names.contains(&"add"), "Should extract 'add', got {:?}", names);
+    assert!(
+        names.contains(&"add"),
+        "Should extract 'add', got {:?}",
+        names
+    );
 }
 
 #[test]
@@ -97,12 +104,7 @@ fn extractor_extract_generic_language() {
 #[test]
 fn extractor_empty_code() {
     let extractor = PatternExtractor::new();
-    let exec = make_execution(
-        "",
-        Language::Rust,
-        vec![make_test("test_empty", true)],
-        5,
-    );
+    let exec = make_execution("", Language::Rust, vec![make_test("test_empty", true)], 5);
     let patterns = extractor.extract(&exec).unwrap();
     // No Rust functions to extract from empty code
     assert!(patterns.is_empty());
@@ -124,12 +126,7 @@ pub fn third() {
     println!("third");
 }
 "#;
-    let exec = make_execution(
-        code,
-        Language::Rust,
-        vec![make_test("test_all", true)],
-        20,
-    );
+    let exec = make_execution(code, Language::Rust, vec![make_test("test_all", true)], 20);
     let patterns = extractor.extract(&exec).unwrap();
     assert!(patterns.len() >= 3);
 }
@@ -229,7 +226,10 @@ fn detector_detect_python_type_names() {
     let detector = VariableDetector::new();
     let vars = detector.detect("config = MyConfig()", &Language::Python);
     let type_vars: Vec<_> = vars.iter().filter(|v| v.var_type == "type").collect();
-    assert!(!type_vars.is_empty(), "Should detect custom type MyConfig in Python");
+    assert!(
+        !type_vars.is_empty(),
+        "Should detect custom type MyConfig in Python"
+    );
 }
 
 #[test]
@@ -368,7 +368,10 @@ fn confidence_all_tests_pass_high() {
         50,
     );
     let score = calc.calculate(&exec);
-    assert!(score > 0.7, "All tests passing should give high confidence, got {score}");
+    assert!(
+        score > 0.7,
+        "All tests passing should give high confidence, got {score}"
+    );
 }
 
 #[test]
@@ -433,7 +436,10 @@ fn confidence_slow_execution() {
         50000,
     );
     let score = calc.calculate(&exec);
-    assert!(score > 0.0, "Even slow execution should have some confidence");
+    assert!(
+        score > 0.0,
+        "Even slow execution should have some confidence"
+    );
 }
 
 #[test]
@@ -446,7 +452,10 @@ fn confidence_simple_code() {
         5,
     );
     let score = calc.calculate(&exec);
-    assert!(score > 0.6, "Simple code should have good confidence, got {score}");
+    assert!(
+        score > 0.6,
+        "Simple code should have good confidence, got {score}"
+    );
 }
 
 #[test]
@@ -454,27 +463,17 @@ fn confidence_complex_code() {
     let calc = ConfidenceCalculator::new();
     // Deeply nested code
     let code = "fn complex() { if a { if b { if c { if d { if e { if f { } } } } } } }";
-    let exec = make_execution(
-        code,
-        Language::Rust,
-        vec![make_test("t1", true)],
-        5,
-    );
+    let exec = make_execution(code, Language::Rust, vec![make_test("t1", true)], 5);
     let score = calc.calculate(&exec);
-    assert!(score > 0.0 && score <= 1.0);
+    assert!((0.0..=1.0).contains(&score) && score > 0.0);
 }
 
 #[test]
 fn confidence_clamped_to_zero_one() {
     let calc = ConfidenceCalculator::new();
-    let exec = make_execution(
-        "x",
-        Language::Rust,
-        vec![make_test("t1", true)],
-        1,
-    );
+    let exec = make_execution("x", Language::Rust, vec![make_test("t1", true)], 1);
     let score = calc.calculate(&exec);
-    assert!(score >= 0.0 && score <= 1.0);
+    assert!((0.0..=1.0).contains(&score));
 }
 
 #[test]

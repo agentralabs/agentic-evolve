@@ -138,7 +138,11 @@ async fn call_pattern_store_valid() {
         "template": "fn test() {}"
     });
     let result = ToolRegistry::call("evolve_pattern_store", Some(args), &session).await;
-    assert!(result.is_ok(), "evolve_pattern_store should succeed: {:?}", result.err());
+    assert!(
+        result.is_ok(),
+        "evolve_pattern_store should succeed: {:?}",
+        result.err()
+    );
 }
 
 #[tokio::test]
@@ -181,7 +185,11 @@ async fn call_match_signature_valid() {
         "language": "rust"
     });
     let result = ToolRegistry::call("evolve_match_signature", Some(args), &session).await;
-    assert!(result.is_ok(), "evolve_match_signature should succeed: {:?}", result.err());
+    assert!(
+        result.is_ok(),
+        "evolve_match_signature should succeed: {:?}",
+        result.err()
+    );
 }
 
 #[tokio::test]
@@ -193,7 +201,11 @@ async fn call_match_context_valid() {
         "domain": "web"
     });
     let result = ToolRegistry::call("evolve_match_context", Some(args), &session).await;
-    assert!(result.is_ok(), "evolve_match_context should succeed: {:?}", result.err());
+    assert!(
+        result.is_ok(),
+        "evolve_match_context should succeed: {:?}",
+        result.err()
+    );
 }
 
 #[tokio::test]
@@ -207,7 +219,11 @@ async fn call_crystallize_valid() {
         "execution_time_ms": 10
     });
     let result = ToolRegistry::call("evolve_crystallize", Some(args), &session).await;
-    assert!(result.is_ok(), "crystallize should succeed: {:?}", result.err());
+    assert!(
+        result.is_ok(),
+        "crystallize should succeed: {:?}",
+        result.err()
+    );
 }
 
 #[tokio::test]
@@ -218,7 +234,11 @@ async fn call_get_body_valid() {
         "language": "rust"
     });
     let result = ToolRegistry::call("evolve_get_body", Some(args), &session).await;
-    assert!(result.is_ok(), "evolve_get_body should succeed: {:?}", result.err());
+    assert!(
+        result.is_ok(),
+        "evolve_get_body should succeed: {:?}",
+        result.err()
+    );
 }
 
 #[tokio::test]
@@ -237,7 +257,11 @@ async fn call_coverage_valid() {
         ]
     });
     let result = ToolRegistry::call("evolve_coverage", Some(args), &session).await;
-    assert!(result.is_ok(), "evolve_coverage should succeed: {:?}", result.err());
+    assert!(
+        result.is_ok(),
+        "evolve_coverage should succeed: {:?}",
+        result.err()
+    );
 }
 
 // ===========================================================================

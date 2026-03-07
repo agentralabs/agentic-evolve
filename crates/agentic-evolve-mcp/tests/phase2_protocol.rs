@@ -1,14 +1,13 @@
 //! Phase 2 MCP: Protocol tests — message parsing, validation, negotiation.
 
+use agentic_evolve_mcp::protocol::negotiation::NegotiatedCapabilities;
+use agentic_evolve_mcp::protocol::validator::validate_request;
 use agentic_evolve_mcp::types::capabilities::{
     ClientCapabilities, Implementation, InitializeParams, MCP_VERSION,
 };
-use agentic_evolve_mcp::types::error::McpError;
 use agentic_evolve_mcp::types::message::{
     JsonRpcMessage, JsonRpcRequest, RequestId, JSONRPC_VERSION,
 };
-use agentic_evolve_mcp::protocol::negotiation::NegotiatedCapabilities;
-use agentic_evolve_mcp::protocol::validator::validate_request;
 
 // ===========================================================================
 // Message parsing

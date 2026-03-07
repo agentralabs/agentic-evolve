@@ -88,27 +88,42 @@ mod tests {
 
     #[test]
     fn verdict_from_score_excellent() {
-        assert_eq!(ConservationVerdict::from_score(0.95), ConservationVerdict::Excellent);
+        assert_eq!(
+            ConservationVerdict::from_score(0.95),
+            ConservationVerdict::Excellent
+        );
     }
 
     #[test]
     fn verdict_from_score_good() {
-        assert_eq!(ConservationVerdict::from_score(0.75), ConservationVerdict::Good);
+        assert_eq!(
+            ConservationVerdict::from_score(0.75),
+            ConservationVerdict::Good
+        );
     }
 
     #[test]
     fn verdict_from_score_fair() {
-        assert_eq!(ConservationVerdict::from_score(0.55), ConservationVerdict::Fair);
+        assert_eq!(
+            ConservationVerdict::from_score(0.55),
+            ConservationVerdict::Fair
+        );
     }
 
     #[test]
     fn verdict_from_score_poor() {
-        assert_eq!(ConservationVerdict::from_score(0.35), ConservationVerdict::Poor);
+        assert_eq!(
+            ConservationVerdict::from_score(0.35),
+            ConservationVerdict::Poor
+        );
     }
 
     #[test]
     fn verdict_from_score_wasteful() {
-        assert_eq!(ConservationVerdict::from_score(0.1), ConservationVerdict::Wasteful);
+        assert_eq!(
+            ConservationVerdict::from_score(0.1),
+            ConservationVerdict::Wasteful
+        );
     }
 
     #[test]

@@ -202,7 +202,7 @@ mod tests {
         let m = TokenMetrics::new();
         m.record(Layer::Cache, 0, 100); // saved 100
         m.record(Layer::Full, 100, 100); // saved 0
-        // total used = 100, total saved = 100, potential = 200
+                                         // total used = 100, total saved = 100, potential = 200
         assert!((m.conservation_score() - 0.5).abs() < f64::EPSILON);
     }
 

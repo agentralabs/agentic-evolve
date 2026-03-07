@@ -45,6 +45,15 @@ The current fixes do not work. Template engines produce rigid output that breaks
 **Current AI:** Cold start on every build. No reuse. No learning. No acceleration.
 **AgenticEvolve:** Crystallizes verified patterns from successful builds and matches them to new contexts, so the first build takes a minute and the hundredth takes fifteen seconds.
 
+<a name="quickstart"></a>
+
+## Quickstart
+
+```bash
+cargo install agentic-evolve-cli
+evolve --help
+```
+
 <a name="problems-solved"></a>
 
 ## Problems Solved (Read This First)
@@ -118,6 +127,16 @@ evolve compose --patterns p1,p2,p3 --output src/handlers/task.rs
 
 ---
 
+<a name="benchmarks"></a>
+
+## Benchmarks
+
+<p align="center">
+  <img src="assets/benchmark-chart.svg" alt="AgenticEvolve benchmarks" width="980">
+</p>
+
+---
+
 <a name="install"></a>
 
 ## Install
@@ -130,6 +149,13 @@ cargo install --path crates/agentic-evolve-cli
 
 ```bash
 curl -fsSL https://agentralabs.tech/install/evolve | bash
+```
+
+```bash
+cargo install agentic-evolve-cli
+cargo install agentic-evolve-mcp
+pip install aevolve-installer && aevolve-install install --auto
+npm install @agenticamem/evolve
 ```
 
 **Standalone guarantee:** AgenticEvolve operates fully standalone. No other sister, external service, or orchestrator is required.

@@ -2,12 +2,10 @@
 
 use std::time::Duration;
 
-use agentic_evolve_core::cache::lru::LruCache;
 use agentic_evolve_core::cache::invalidation::CacheInvalidator;
+use agentic_evolve_core::cache::lru::LruCache;
 use agentic_evolve_core::metrics::audit::{AuditEntry, AuditLog};
-use agentic_evolve_core::metrics::conservation::{
-    generate_report, ConservationVerdict,
-};
+use agentic_evolve_core::metrics::conservation::generate_report;
 use agentic_evolve_core::metrics::tokens::{Layer, TokenMetrics};
 use agentic_evolve_core::query::budget::TokenBudget;
 use agentic_evolve_core::query::delta::VersionedState;
@@ -93,9 +91,7 @@ fn test_delta_proportional_to_changes() {
 
     let result = state.changes_since_version(baseline);
     match result {
-        agentic_evolve_core::query::delta::DeltaResult::Changed {
-            items, ..
-        } => {
+        agentic_evolve_core::query::delta::DeltaResult::Changed { items, .. } => {
             // Only 2 items returned, not the full 12.
             assert_eq!(items.len(), 2);
             assert!(items.contains(&11));
@@ -125,7 +121,10 @@ fn test_conservation_score_improves_with_warmup() {
     let warm_score_2 = metrics.conservation_score();
 
     // Score should improve as more queries hit the cache.
-    assert!(warm_score_1 > cold_score, "Score should improve after first cache hit");
+    assert!(
+        warm_score_1 > cold_score,
+        "Score should improve after first cache hit"
+    );
     assert!(warm_score_2 > warm_score_1, "Score should improve further");
 }
 

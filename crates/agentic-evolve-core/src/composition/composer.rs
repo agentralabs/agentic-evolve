@@ -30,13 +30,13 @@ impl PatternComposer {
         order: Option<&[usize]>,
     ) -> EvolveResult<CompositionResult> {
         if patterns.is_empty() {
-            return Err(EvolveError::CompositionError("No patterns to compose".to_string()));
+            return Err(EvolveError::CompositionError(
+                "No patterns to compose".to_string(),
+            ));
         }
 
         let ordered: Vec<&&Pattern> = match order {
-            Some(indices) => indices.iter()
-                .filter_map(|&i| patterns.get(i))
-                .collect(),
+            Some(indices) => indices.iter().filter_map(|&i| patterns.get(i)).collect(),
             None => patterns.iter().collect(),
         };
 

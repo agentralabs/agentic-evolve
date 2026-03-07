@@ -138,7 +138,10 @@ pub fn run(args: MatchArgs, data_dir: &str, json: bool) -> Result<()> {
             } else {
                 println!("Semantic matches ({}):", limited.len());
                 for p in &limited {
-                    println!("  {} - {} [{}] confidence={:.2}", p.id, p.name, p.domain, p.confidence);
+                    println!(
+                        "  {} - {} [{}] confidence={:.2}",
+                        p.id, p.name, p.domain, p.confidence
+                    );
                 }
             }
         }
@@ -151,7 +154,10 @@ pub fn run(args: MatchArgs, data_dir: &str, json: bool) -> Result<()> {
             } else {
                 println!("Fuzzy matches ({}):", limited.len());
                 for p in &limited {
-                    println!("  {} - {} [{}] confidence={:.2}", p.id, p.name, p.domain, p.confidence);
+                    println!(
+                        "  {} - {} [{}] confidence={:.2}",
+                        p.id, p.name, p.domain, p.confidence
+                    );
                 }
             }
         }

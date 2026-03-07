@@ -104,7 +104,10 @@ impl CompositeMatcher {
             .collect();
 
         results.sort_by(|a, b| {
-            b.score.combined.partial_cmp(&a.score.combined).unwrap_or(std::cmp::Ordering::Equal)
+            b.score
+                .combined
+                .partial_cmp(&a.score.combined)
+                .unwrap_or(std::cmp::Ordering::Equal)
         });
         results.truncate(limit);
         Ok(results)

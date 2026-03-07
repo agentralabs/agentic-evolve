@@ -20,9 +20,7 @@ impl<T: Clone> CursorPage<T> {
     ///
     /// The cursor is a stringified index. If `None`, starts from 0.
     pub fn from_slice(data: &[T], cursor: Option<&str>, limit: usize) -> Self {
-        let start = cursor
-            .and_then(|c| c.parse::<usize>().ok())
-            .unwrap_or(0);
+        let start = cursor.and_then(|c| c.parse::<usize>().ok()).unwrap_or(0);
 
         let clamped_start = start.min(data.len());
         let end = (clamped_start + limit).min(data.len());

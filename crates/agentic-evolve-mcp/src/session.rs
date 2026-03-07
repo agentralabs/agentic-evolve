@@ -3,7 +3,9 @@
 use std::collections::HashMap;
 use std::path::Path;
 
-use agentic_evolve_core::collective::{DecayManager, PromotionEngine, SuccessTracker, UsageTracker};
+use agentic_evolve_core::collective::{
+    DecayManager, PromotionEngine, SuccessTracker, UsageTracker,
+};
 use agentic_evolve_core::composition::PatternComposer;
 use agentic_evolve_core::crystallization::PatternExtractor;
 use agentic_evolve_core::matching::CompositeMatcher;
@@ -72,11 +74,14 @@ impl SessionManager {
         confidence: f64,
         tags: Vec<String>,
     ) -> EvolveResult<Pattern> {
-        let mut pattern = Pattern::new(name, domain, language, signature, template, variables, confidence);
+        let mut pattern = Pattern::new(
+            name, domain, language, signature, template, variables, confidence,
+        );
         pattern.tags = tags;
         self.store.save(&pattern)?;
         self.index.add(&pattern);
-        self.versioner.record_version(&pattern, "Initial creation")?;
+        self.versioner
+            .record_version(&pattern, "Initial creation")?;
         Ok(pattern)
     }
 
@@ -113,7 +118,8 @@ impl SessionManager {
         limit: usize,
     ) -> EvolveResult<Vec<MatchResult>> {
         let patterns: Vec<&Pattern> = self.store.list();
-        self.matcher.find_matches(signature, &patterns, context, limit)
+        self.matcher
+            .find_matches(signature, &patterns, context, limit)
     }
 
     /// Match patterns with surrounding context.
@@ -124,7 +130,8 @@ impl SessionManager {
         limit: usize,
     ) -> EvolveResult<Vec<MatchResult>> {
         let patterns: Vec<&Pattern> = self.store.list();
-        self.matcher.find_matches(signature, &patterns, context, limit)
+        self.matcher
+            .find_matches(signature, &patterns, context, limit)
     }
 
     // --- Crystallization ---
@@ -136,7 +143,8 @@ impl SessionManager {
         for pattern in patterns {
             self.store.save(&pattern)?;
             self.index.add(&pattern);
-            self.versioner.record_version(&pattern, "Crystallized from successful execution")?;
+            self.versioner
+                .record_version(&pattern, "Crystallized from successful execution")?;
             stored.push(pattern);
         }
         Ok(stored)
@@ -160,11 +168,7 @@ impl SessionManager {
     // --- Coverage ---
 
     /// Get pattern coverage for a set of function signatures.
-    pub fn coverage(
-        &self,
-        signatures: &[FunctionSignature],
-        threshold: f64,
-    ) -> CoverageReport {
+    pub fn coverage(&self, signatures: &[FunctionSignature], threshold: f64) -> CoverageReport {
         let all_patterns: Vec<&Pattern> = self.store.list();
         let context = MatchContext::new();
         let mut matched = 0;
@@ -193,7 +197,11 @@ impl SessionManager {
         CoverageReport {
             total,
             covered: matched,
-            coverage: if total == 0 { 1.0 } else { matched as f64 / total as f64 },
+            coverage: if total == 0 {
+                1.0
+            } else {
+                matched as f64 / total as f64
+            },
             details,
         }
     }
@@ -250,7 +258,12 @@ impl SessionManager {
         let decay_report = self.decay_manager.decay_report(&patterns);
 
         // Apply decay to all patterns
-        let ids: Vec<String> = self.store.list().iter().map(|p| p.id.as_str().to_string()).collect();
+        let ids: Vec<String> = self
+            .store
+            .list()
+            .iter()
+            .map(|p| p.id.as_str().to_string())
+            .collect();
         let mut decayed = 0;
         for id in &ids {
             if let Ok(pattern) = self.store.get_mut(id) {
@@ -269,8 +282,12 @@ impl SessionManager {
             if let Ok(pattern) = self.store.get_mut(id) {
                 let decision = self.promotion_engine.apply_promotion(pattern);
                 match decision {
-                    agentic_evolve_core::collective::promotion::PromotionDecision::Promote => promoted += 1,
-                    agentic_evolve_core::collective::promotion::PromotionDecision::Demote => demoted += 1,
+                    agentic_evolve_core::collective::promotion::PromotionDecision::Promote => {
+                        promoted += 1
+                    }
+                    agentic_evolve_core::collective::promotion::PromotionDecision::Demote => {
+                        demoted += 1
+                    }
                     _ => {}
                 }
             }
@@ -299,7 +316,9 @@ impl SessionManager {
         context: &MatchContext,
     ) -> EvolveResult<Option<(String, String, f64)>> {
         let patterns: Vec<&Pattern> = self.store.list();
-        let results = self.matcher.find_matches(signature, &patterns, context, 1)?;
+        let results = self
+            .matcher
+            .find_matches(signature, &patterns, context, 1)?;
         match results.into_iter().next() {
             Some(result) => Ok(Some((
                 result.pattern.template.clone(),

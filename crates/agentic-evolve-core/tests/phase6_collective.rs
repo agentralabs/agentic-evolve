@@ -1,14 +1,24 @@
 //! Phase 6: Collective learning tests — Usage, Success, Decay, Promotion.
 
 use agentic_evolve_core::collective::decay::{DecayConfig, DecayManager};
-use agentic_evolve_core::collective::promotion::{PromotionConfig, PromotionDecision, PromotionEngine};
+use agentic_evolve_core::collective::promotion::{
+    PromotionConfig, PromotionDecision, PromotionEngine,
+};
 use agentic_evolve_core::collective::success::SuccessTracker;
 use agentic_evolve_core::collective::usage::UsageTracker;
 use agentic_evolve_core::types::pattern::{FunctionSignature, Language, Pattern};
 
 fn make_pattern(name: &str, confidence: f64) -> Pattern {
     let sig = FunctionSignature::new(name, Language::Rust);
-    Pattern::new(name, "test", Language::Rust, sig, "fn test() {}", vec![], confidence)
+    Pattern::new(
+        name,
+        "test",
+        Language::Rust,
+        sig,
+        "fn test() {}",
+        vec![],
+        confidence,
+    )
 }
 
 // ===========================================================================
@@ -208,7 +218,10 @@ fn success_recent_success_rate() {
     }
     let record = tracker.get("p1").unwrap();
     let recent = record.recent_success_rate(5);
-    assert!((recent - 0.0).abs() < f64::EPSILON, "Last 5 were failures, rate should be 0.0");
+    assert!(
+        (recent - 0.0).abs() < f64::EPSILON,
+        "Last 5 were failures, rate should be 0.0"
+    );
 }
 
 #[test]
@@ -315,7 +328,10 @@ fn decay_should_not_prune_popular() {
     let manager = DecayManager::default();
     let mut p = make_pattern("popular", 0.05);
     p.usage_count = 100;
-    assert!(!manager.should_prune(&p), "Popular patterns should not be pruned");
+    assert!(
+        !manager.should_prune(&p),
+        "Popular patterns should not be pruned"
+    );
 }
 
 #[test]

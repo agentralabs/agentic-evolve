@@ -32,7 +32,8 @@ impl PatternStore {
     }
 
     pub fn save(&mut self, pattern: &Pattern) -> EvolveResult<()> {
-        self.patterns.insert(pattern.id.as_str().to_string(), pattern.clone());
+        self.patterns
+            .insert(pattern.id.as_str().to_string(), pattern.clone());
         if let Some(dir) = &self.data_dir {
             let path = dir.join(format!("{}.json", pattern.id.as_str()));
             let json = serde_json::to_string_pretty(pattern)?;
@@ -54,7 +55,9 @@ impl PatternStore {
     }
 
     pub fn delete(&mut self, id: &str) -> EvolveResult<Pattern> {
-        let pattern = self.patterns.remove(id)
+        let pattern = self
+            .patterns
+            .remove(id)
             .ok_or_else(|| EvolveError::PatternNotFound(id.to_string()))?;
         if let Some(dir) = &self.data_dir {
             let path = dir.join(format!("{id}.json"));
@@ -91,7 +94,9 @@ impl PatternStore {
                 p.name.to_lowercase().contains(&query_lower)
                     || p.domain.to_lowercase().contains(&query_lower)
                     || p.template.to_lowercase().contains(&query_lower)
-                    || p.tags.iter().any(|t| t.to_lowercase().contains(&query_lower))
+                    || p.tags
+                        .iter()
+                        .any(|t| t.to_lowercase().contains(&query_lower))
             })
             .collect()
     }
@@ -134,7 +139,8 @@ impl PatternStore {
                 let content = std::fs::read_to_string(&path)?;
                 match serde_json::from_str::<Pattern>(&content) {
                     Ok(pattern) => {
-                        self.patterns.insert(pattern.id.as_str().to_string(), pattern);
+                        self.patterns
+                            .insert(pattern.id.as_str().to_string(), pattern);
                     }
                     Err(e) => {
                         tracing::warn!("Failed to load pattern from {:?}: {}", path, e);

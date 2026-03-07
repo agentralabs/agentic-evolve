@@ -34,7 +34,12 @@ impl ContextMatcher {
             .filter(|r| r.score.combined > 0.0)
             .collect();
 
-        results.sort_by(|a, b| b.score.combined.partial_cmp(&a.score.combined).unwrap_or(std::cmp::Ordering::Equal));
+        results.sort_by(|a, b| {
+            b.score
+                .combined
+                .partial_cmp(&a.score.combined)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        });
         results.truncate(limit);
         Ok(results)
     }
@@ -47,7 +52,11 @@ impl ContextMatcher {
         if let Some(domain) = &context.domain {
             if pattern.domain.to_lowercase() == domain.to_lowercase() {
                 score += 1.0;
-            } else if pattern.domain.to_lowercase().contains(&domain.to_lowercase()) {
+            } else if pattern
+                .domain
+                .to_lowercase()
+                .contains(&domain.to_lowercase())
+            {
                 score += 0.5;
             }
             factors += 1;
@@ -56,7 +65,9 @@ impl ContextMatcher {
         // Import overlap
         if !context.imports.is_empty() {
             let template_lower = pattern.template.to_lowercase();
-            let import_matches = context.imports.iter()
+            let import_matches = context
+                .imports
+                .iter()
                 .filter(|imp| template_lower.contains(&imp.to_lowercase()))
                 .count();
             if !context.imports.is_empty() {
@@ -68,7 +79,8 @@ impl ContextMatcher {
         // Surrounding code similarity
         if let Some(surrounding) = &context.surrounding_code {
             let words: std::collections::HashSet<&str> = surrounding.split_whitespace().collect();
-            let template_words: std::collections::HashSet<&str> = pattern.template.split_whitespace().collect();
+            let template_words: std::collections::HashSet<&str> =
+                pattern.template.split_whitespace().collect();
             let overlap = words.intersection(&template_words).count();
             let total = words.len().max(1);
             score += overlap as f64 / total as f64;

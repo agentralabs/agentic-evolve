@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 
 use agentic_evolve_core::cache::LruCache;
 use agentic_evolve_core::matching::signature::SignatureMatcher;
@@ -89,7 +89,15 @@ fn bench_pattern_record_use(c: &mut Criterion) {
 }
 
 fn bench_language_parsing(c: &mut Criterion) {
-    let languages = ["rust", "python", "typescript", "go", "java", "csharp", "cpp"];
+    let languages = [
+        "rust",
+        "python",
+        "typescript",
+        "go",
+        "java",
+        "csharp",
+        "cpp",
+    ];
     c.bench_function("language_from_name", |b| {
         b.iter(|| {
             for lang in &languages {
@@ -153,8 +161,16 @@ fn bench_signature_find_matches(c: &mut Criterion) {
     let query = FunctionSignature {
         name: "authenticate_user".to_string(),
         params: vec![
-            ParamSignature { name: "token".to_string(), param_type: "String".to_string(), is_optional: false },
-            ParamSignature { name: "scope".to_string(), param_type: "Scope".to_string(), is_optional: true },
+            ParamSignature {
+                name: "token".to_string(),
+                param_type: "String".to_string(),
+                is_optional: false,
+            },
+            ParamSignature {
+                name: "scope".to_string(),
+                param_type: "Scope".to_string(),
+                is_optional: true,
+            },
         ],
         return_type: Some("Result<User>".to_string()),
         language: Language::Rust,
@@ -189,7 +205,10 @@ fn bench_store_save_and_get(c: &mut Criterion) {
 fn bench_store_search(c: &mut Criterion) {
     let mut store = PatternStore::new();
     for i in 0..100 {
-        let p = make_pattern(&format!("search-pattern-{i}"), if i % 2 == 0 { "web" } else { "cli" });
+        let p = make_pattern(
+            &format!("search-pattern-{i}"),
+            if i % 2 == 0 { "web" } else { "cli" },
+        );
         store.save(&p).unwrap();
     }
     c.bench_function("store_search_100", |b| {

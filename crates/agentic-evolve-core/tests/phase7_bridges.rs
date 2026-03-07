@@ -1,8 +1,8 @@
 //! Phase 7: Bridge tests — NoOp bridges, BridgeConfig, trait object safety.
 
 use agentic_evolve_core::bridges::{
-    BridgeConfig, CodebaseBridge, CognitionBridge, ContractBridge, IdentityBridge,
-    MemoryBridge, NoOpBridges,
+    BridgeConfig, CodebaseBridge, CognitionBridge, ContractBridge, IdentityBridge, MemoryBridge,
+    NoOpBridges,
 };
 
 // ===========================================================================
@@ -149,5 +149,5 @@ fn noop_bridges_debug() {
 
 #[test]
 fn noop_bridges_default() {
-    let _bridge = NoOpBridges::default();
+    let _bridge = NoOpBridges;
 }

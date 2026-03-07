@@ -77,15 +77,11 @@ pub fn apply_intent<T: Scopeable + Clone + Serialize>(
 ) -> ScopedResult<T> {
     match intent {
         ExtractionIntent::Exists => ScopedResult::Exists(!items.is_empty()),
-        ExtractionIntent::IdsOnly => {
-            ScopedResult::Ids(items.iter().map(|i| i.id()).collect())
-        }
+        ExtractionIntent::IdsOnly => ScopedResult::Ids(items.iter().map(|i| i.id()).collect()),
         ExtractionIntent::Summary => {
             ScopedResult::Summaries(items.iter().map(|i| i.summary()).collect())
         }
-        ExtractionIntent::Fields | ExtractionIntent::Full => {
-            ScopedResult::Full(items.to_vec())
-        }
+        ExtractionIntent::Fields | ExtractionIntent::Full => ScopedResult::Full(items.to_vec()),
     }
 }
 
@@ -174,10 +170,21 @@ mod tests {
 
     #[test]
     fn estimated_tokens_ordering() {
-        assert!(ExtractionIntent::Exists.estimated_tokens() < ExtractionIntent::IdsOnly.estimated_tokens());
-        assert!(ExtractionIntent::IdsOnly.estimated_tokens() < ExtractionIntent::Summary.estimated_tokens());
-        assert!(ExtractionIntent::Summary.estimated_tokens() < ExtractionIntent::Fields.estimated_tokens());
-        assert!(ExtractionIntent::Fields.estimated_tokens() < ExtractionIntent::Full.estimated_tokens());
+        assert!(
+            ExtractionIntent::Exists.estimated_tokens()
+                < ExtractionIntent::IdsOnly.estimated_tokens()
+        );
+        assert!(
+            ExtractionIntent::IdsOnly.estimated_tokens()
+                < ExtractionIntent::Summary.estimated_tokens()
+        );
+        assert!(
+            ExtractionIntent::Summary.estimated_tokens()
+                < ExtractionIntent::Fields.estimated_tokens()
+        );
+        assert!(
+            ExtractionIntent::Fields.estimated_tokens() < ExtractionIntent::Full.estimated_tokens()
+        );
     }
 
     #[test]

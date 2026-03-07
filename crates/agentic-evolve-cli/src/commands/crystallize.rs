@@ -42,7 +42,13 @@ pub fn run_stdin(args: CrystallizeStdinArgs, data_dir: &str, json: bool) -> Resu
     crystallize_code(&code, &args.language, &args.domain, data_dir, json)
 }
 
-fn crystallize_code(code: &str, language: &str, domain: &str, data_dir: &str, json: bool) -> Result<()> {
+fn crystallize_code(
+    code: &str,
+    language: &str,
+    domain: &str,
+    data_dir: &str,
+    json: bool,
+) -> Result<()> {
     let mut session = SessionManager::new(data_dir)?;
 
     let execution = SuccessfulExecution {
@@ -60,7 +66,10 @@ fn crystallize_code(code: &str, language: &str, domain: &str, data_dir: &str, js
     } else {
         println!("Crystallized {} pattern(s):", patterns.len());
         for p in &patterns {
-            println!("  {} - {} [{}] confidence={:.2}", p.id, p.name, p.domain, p.confidence);
+            println!(
+                "  {} - {} [{}] confidence={:.2}",
+                p.id, p.name, p.domain, p.confidence
+            );
         }
     }
 

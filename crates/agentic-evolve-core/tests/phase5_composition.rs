@@ -14,7 +14,15 @@ fn make_pattern(name: &str, template: &str) -> Pattern {
 }
 
 fn make_pattern_with_sig(name: &str, template: &str, sig: FunctionSignature) -> Pattern {
-    Pattern::new(name, "test", sig.language.clone(), sig, template, vec![], 0.8)
+    Pattern::new(
+        name,
+        "test",
+        sig.language.clone(),
+        sig,
+        template,
+        vec![],
+        0.8,
+    )
 }
 
 // ===========================================================================
@@ -86,7 +94,10 @@ fn composer_unbound_placeholders_in_gaps() {
     let p = make_pattern("tmpl", "fn {{NAME}}({{PARAM}}: {{TYPE}}) {}");
     let bindings = HashMap::new();
     let result = composer.compose(&[&p], &bindings, None).unwrap();
-    assert!(!result.gaps.is_empty(), "Unbound placeholders should appear as gaps");
+    assert!(
+        !result.gaps.is_empty(),
+        "Unbound placeholders should appear as gaps"
+    );
 }
 
 #[test]
@@ -96,7 +107,10 @@ fn composer_coverage_calculation() {
     let mut bindings = HashMap::new();
     bindings.insert("VALUE".to_string(), "42".to_string());
     let result = composer.compose(&[&p], &bindings, None).unwrap();
-    assert!(result.coverage > 0.0, "Coverage should be positive when bindings applied");
+    assert!(
+        result.coverage > 0.0,
+        "Coverage should be positive when bindings applied"
+    );
 }
 
 #[test]

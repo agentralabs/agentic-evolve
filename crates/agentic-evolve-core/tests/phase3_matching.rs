@@ -6,15 +6,17 @@ use agentic_evolve_core::matching::fuzzy::FuzzyMatcher;
 use agentic_evolve_core::matching::semantic::SemanticMatcher;
 use agentic_evolve_core::matching::signature::SignatureMatcher;
 use agentic_evolve_core::types::match_result::MatchContext;
-use agentic_evolve_core::types::pattern::{
-    FunctionSignature, Language, ParamSignature, Pattern, Visibility,
-};
+use agentic_evolve_core::types::pattern::{FunctionSignature, Language, ParamSignature, Pattern};
 
 fn make_sig(name: &str, lang: Language) -> FunctionSignature {
     FunctionSignature::new(name, lang)
 }
 
-fn make_sig_with_params(name: &str, lang: Language, params: Vec<(&str, &str)>) -> FunctionSignature {
+fn make_sig_with_params(
+    name: &str,
+    lang: Language,
+    params: Vec<(&str, &str)>,
+) -> FunctionSignature {
     let mut sig = FunctionSignature::new(name, lang);
     sig.params = params
         .into_iter()
@@ -211,7 +213,10 @@ fn ctx_matcher_import_overlap() {
     ctx.imports = vec!["serde".to_string(), "tokio".to_string()];
     let p = make_pattern_with_template("handler", "web", "use serde;\nfn handler() {}");
     let score = matcher.score_context(&p, &ctx);
-    assert!(score > 0.0, "Import overlap should give some score, got {score}");
+    assert!(
+        score > 0.0,
+        "Import overlap should give some score, got {score}"
+    );
 }
 
 #[test]
@@ -230,7 +235,10 @@ fn ctx_matcher_no_context_gives_default() {
     let ctx = MatchContext::new(); // no domain, no imports, no surrounding code
     let p = make_pattern("any", "any", Language::Rust);
     let score = matcher.score_context(&p, &ctx);
-    assert!((score - 0.3).abs() < 1e-9, "Default context score should be 0.3, got {score}");
+    assert!(
+        (score - 0.3).abs() < 1e-9,
+        "Default context score should be 0.3, got {score}"
+    );
 }
 
 #[test]
@@ -333,7 +341,9 @@ fn sem_matcher_respects_limit() {
     let p1 = make_pattern("get_info", "a", Language::Rust);
     let p2 = make_pattern("fetch_data", "b", Language::Rust);
     let p3 = make_pattern("load_data", "c", Language::Rust);
-    let results = matcher.find_matches(&sig, &[&p1, &p2, &p3], &ctx, 1).unwrap();
+    let results = matcher
+        .find_matches(&sig, &[&p1, &p2, &p3], &ctx, 1)
+        .unwrap();
     assert!(results.len() <= 1);
 }
 
@@ -389,7 +399,10 @@ fn fuzzy_below_threshold_filtered() {
     let p = make_pattern("completely_different", "data", Language::Rust);
     let ctx = MatchContext::new();
     let results = matcher.find_matches(&sig, &[&p], &ctx, 10).unwrap();
-    assert!(results.is_empty(), "Very different names with high threshold should filter");
+    assert!(
+        results.is_empty(),
+        "Very different names with high threshold should filter"
+    );
 }
 
 #[test]
@@ -410,7 +423,9 @@ fn fuzzy_respects_limit() {
     let p1 = make_pattern("test_a", "x", Language::Rust);
     let p2 = make_pattern("test_b", "x", Language::Rust);
     let p3 = make_pattern("test_c", "x", Language::Rust);
-    let results = matcher.find_matches(&sig, &[&p1, &p2, &p3], &ctx, 1).unwrap();
+    let results = matcher
+        .find_matches(&sig, &[&p1, &p2, &p3], &ctx, 1)
+        .unwrap();
     assert!(results.len() <= 1);
 }
 
@@ -474,7 +489,9 @@ fn composite_respects_limit() {
     let p1 = make_pattern("test_a", "x", Language::Rust);
     let p2 = make_pattern("test_b", "x", Language::Rust);
     let p3 = make_pattern("test_c", "x", Language::Rust);
-    let results = matcher.find_matches(&sig, &[&p1, &p2, &p3], &ctx, 2).unwrap();
+    let results = matcher
+        .find_matches(&sig, &[&p1, &p2, &p3], &ctx, 2)
+        .unwrap();
     assert!(results.len() <= 2);
 }
 

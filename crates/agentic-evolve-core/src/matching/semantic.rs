@@ -36,7 +36,12 @@ impl SemanticMatcher {
             .filter(|r| r.score.combined > 0.0)
             .collect();
 
-        results.sort_by(|a, b| b.score.combined.partial_cmp(&a.score.combined).unwrap_or(std::cmp::Ordering::Equal));
+        results.sort_by(|a, b| {
+            b.score
+                .combined
+                .partial_cmp(&a.score.combined)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        });
         results.truncate(limit);
         Ok(results)
     }
@@ -46,11 +51,12 @@ impl SemanticMatcher {
         if query_tokens.is_empty() || pattern_tokens.is_empty() {
             return 0.0;
         }
-        let matches = query_tokens.iter()
+        let matches = query_tokens
+            .iter()
             .filter(|qt| {
-                pattern_tokens.iter().any(|pt| {
-                    pt == *qt || is_semantic_match(pt, qt)
-                })
+                pattern_tokens
+                    .iter()
+                    .any(|pt| pt == *qt || is_semantic_match(pt, qt))
             })
             .count();
         let max_len = query_tokens.len().max(pattern_tokens.len());

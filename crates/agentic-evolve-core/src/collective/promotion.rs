@@ -81,7 +81,8 @@ impl PromotionEngine {
     }
 
     pub fn batch_evaluate(&self, patterns: &[&Pattern]) -> Vec<(String, PromotionDecision)> {
-        patterns.iter()
+        patterns
+            .iter()
             .map(|p| (p.id.as_str().to_string(), self.evaluate(p)))
             .collect()
     }

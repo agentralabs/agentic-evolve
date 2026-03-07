@@ -12,7 +12,9 @@ use crate::types::{McpError, McpResult, ToolCallResult, ToolDefinition};
 pub fn definition() -> ToolDefinition {
     ToolDefinition {
         name: "evolve_optimize".to_string(),
-        description: Some("Optimize pattern storage by applying decay, promotions, and cache cleanup".to_string()),
+        description: Some(
+            "Optimize pattern storage by applying decay, promotions, and cache cleanup".to_string(),
+        ),
         input_schema: json!({
             "type": "object",
             "properties": {}

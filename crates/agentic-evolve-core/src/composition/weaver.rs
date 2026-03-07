@@ -20,8 +20,10 @@ impl IntegrationWeaver {
             // Extract imports from template
             for line in pattern.template.lines() {
                 let trimmed = line.trim();
-                if trimmed.starts_with("use ") || trimmed.starts_with("import ")
-                    || trimmed.starts_with("from ") || trimmed.starts_with("#include")
+                if trimmed.starts_with("use ")
+                    || trimmed.starts_with("import ")
+                    || trimmed.starts_with("from ")
+                    || trimmed.starts_with("#include")
                 {
                     imports.insert(trimmed.to_string());
                 }
@@ -45,11 +47,14 @@ impl IntegrationWeaver {
         // Bodies
         for (i, part) in body_parts.iter().enumerate() {
             // Strip imports from body
-            let body: String = part.lines()
+            let body: String = part
+                .lines()
                 .filter(|l| {
                     let t = l.trim();
-                    !t.starts_with("use ") && !t.starts_with("import ")
-                        && !t.starts_with("from ") && !t.starts_with("#include")
+                    !t.starts_with("use ")
+                        && !t.starts_with("import ")
+                        && !t.starts_with("from ")
+                        && !t.starts_with("#include")
                 })
                 .collect::<Vec<&str>>()
                 .join("\n");

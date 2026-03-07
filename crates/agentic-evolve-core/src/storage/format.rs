@@ -39,14 +39,21 @@ pub fn read_patterns(data: &[u8]) -> EvolveResult<Vec<Pattern>> {
     let mut offset = 10;
     for _ in 0..count {
         if offset + 4 > data.len() {
-            return Err(EvolveError::StorageError("Unexpected end of file".to_string()));
+            return Err(EvolveError::StorageError(
+                "Unexpected end of file".to_string(),
+            ));
         }
         let len = u32::from_le_bytes([
-            data[offset], data[offset + 1], data[offset + 2], data[offset + 3],
+            data[offset],
+            data[offset + 1],
+            data[offset + 2],
+            data[offset + 3],
         ]) as usize;
         offset += 4;
         if offset + len > data.len() {
-            return Err(EvolveError::StorageError("Unexpected end of file".to_string()));
+            return Err(EvolveError::StorageError(
+                "Unexpected end of file".to_string(),
+            ));
         }
         let pattern: Pattern = serde_json::from_slice(&data[offset..offset + len])?;
         patterns.push(pattern);

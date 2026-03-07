@@ -76,19 +76,61 @@ impl VariableDetector {
 }
 
 fn is_common_type(name: &str) -> bool {
-    matches!(name,
-        "String" | "Vec" | "HashMap" | "HashSet" | "Option" | "Result"
-        | "Box" | "Arc" | "Rc" | "Mutex" | "RwLock" | "Cell" | "RefCell"
-        | "Self" | "Ok" | "Err" | "Some" | "None" | "Default" | "Debug"
-        | "Clone" | "Copy" | "Send" | "Sync" | "Display" | "Error"
-        | "Serialize" | "Deserialize" | "Value" | "Path" | "PathBuf"
+    matches!(
+        name,
+        "String"
+            | "Vec"
+            | "HashMap"
+            | "HashSet"
+            | "Option"
+            | "Result"
+            | "Box"
+            | "Arc"
+            | "Rc"
+            | "Mutex"
+            | "RwLock"
+            | "Cell"
+            | "RefCell"
+            | "Self"
+            | "Ok"
+            | "Err"
+            | "Some"
+            | "None"
+            | "Default"
+            | "Debug"
+            | "Clone"
+            | "Copy"
+            | "Send"
+            | "Sync"
+            | "Display"
+            | "Error"
+            | "Serialize"
+            | "Deserialize"
+            | "Value"
+            | "Path"
+            | "PathBuf"
     )
 }
 
 fn is_common_python_type(name: &str) -> bool {
-    matches!(name,
-        "True" | "False" | "None" | "List" | "Dict" | "Set" | "Tuple"
-        | "Optional" | "Union" | "Any" | "Type" | "Callable" | "Iterator"
-        | "Exception" | "ValueError" | "TypeError" | "KeyError"
+    matches!(
+        name,
+        "True"
+            | "False"
+            | "None"
+            | "List"
+            | "Dict"
+            | "Set"
+            | "Tuple"
+            | "Optional"
+            | "Union"
+            | "Any"
+            | "Type"
+            | "Callable"
+            | "Iterator"
+            | "Exception"
+            | "ValueError"
+            | "TypeError"
+            | "KeyError"
     )
 }

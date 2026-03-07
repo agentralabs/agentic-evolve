@@ -1,11 +1,11 @@
 //! Phase 1 MCP: Type tests — McpError, ToolDefinition, ToolCallResult, JSON-RPC messages.
 
+use agentic_evolve_mcp::types::capabilities::InitializeResult;
 use agentic_evolve_mcp::types::error::{error_codes, mcp_error_codes, McpError};
 use agentic_evolve_mcp::types::message::{
     JsonRpcError, JsonRpcNotification, JsonRpcRequest, JsonRpcResponse, RequestId, JSONRPC_VERSION,
 };
 use agentic_evolve_mcp::types::response::{ToolCallResult, ToolDefinition};
-use agentic_evolve_mcp::types::capabilities::InitializeResult;
 use serde_json::json;
 
 // ===========================================================================
@@ -133,7 +133,11 @@ fn json_rpc_response_serialization() {
 
 #[test]
 fn json_rpc_error_serialization() {
-    let err = JsonRpcError::new(RequestId::String("abc".to_string()), -32600, "Invalid".to_string());
+    let err = JsonRpcError::new(
+        RequestId::String("abc".to_string()),
+        -32600,
+        "Invalid".to_string(),
+    );
     let json = serde_json::to_value(&err).unwrap();
     assert_eq!(json["error"]["code"], -32600);
 }

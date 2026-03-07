@@ -1,9 +1,7 @@
 //! Phase 9: Edge case, stress, and boundary tests for pattern library robustness.
 
-use agentic_evolve_core::types::pattern::{
-    FunctionSignature, Language, Pattern, PatternVariable,
-};
 use agentic_evolve_core::matching::signature::SignatureMatcher;
+use agentic_evolve_core::types::pattern::{FunctionSignature, Language, Pattern, PatternVariable};
 
 fn make_pattern(name: &str, domain: &str, confidence: f64) -> Pattern {
     let sig = FunctionSignature::new(name, Language::Rust);
@@ -86,7 +84,7 @@ fn edge_special_characters_in_name() {
 #[test]
 fn edge_unicode_in_name() {
     let pattern = make_pattern("hello-world", "web", 0.8);
-    assert!(pattern.name.len() > 0);
+    assert!(!pattern.name.is_empty());
 }
 
 // ── stress: heavy usage recording ────────────────────────────────────
@@ -171,7 +169,10 @@ fn stress_rapid_pattern_creation() {
     let elapsed = start.elapsed();
     assert_eq!(patterns.len(), 5000);
     // Should complete in under 1 second
-    assert!(elapsed.as_secs() < 5, "Pattern creation too slow: {elapsed:?}");
+    assert!(
+        elapsed.as_secs() < 5,
+        "Pattern creation too slow: {elapsed:?}"
+    );
 }
 
 // ── edge_case: all languages ─────────────────────────────────────────
@@ -179,8 +180,17 @@ fn stress_rapid_pattern_creation() {
 #[test]
 fn edge_all_language_variants() {
     let languages = vec![
-        "rust", "python", "typescript", "javascript", "go",
-        "java", "csharp", "cpp", "c", "shell", "unknown-lang",
+        "rust",
+        "python",
+        "typescript",
+        "javascript",
+        "go",
+        "java",
+        "csharp",
+        "cpp",
+        "c",
+        "shell",
+        "unknown-lang",
     ];
     for lang_name in &languages {
         let lang = Language::from_name(lang_name);

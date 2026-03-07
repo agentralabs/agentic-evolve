@@ -73,7 +73,11 @@ pub fn run(args: PatternArgs, data_dir: &str, json: bool) -> Result<()> {
             let confidence = v["confidence"].as_f64().unwrap_or(0.5);
             let tags: Vec<String> = v["tags"]
                 .as_array()
-                .map(|a| a.iter().filter_map(|t| t.as_str().map(String::from)).collect())
+                .map(|a| {
+                    a.iter()
+                        .filter_map(|t| t.as_str().map(String::from))
+                        .collect()
+                })
                 .unwrap_or_default();
 
             let sig_name = v["signature"]["name"].as_str().unwrap_or(name);
@@ -88,8 +92,9 @@ pub fn run(args: PatternArgs, data_dir: &str, json: bool) -> Result<()> {
                 })
                 .unwrap_or_default();
 
-            let pattern =
-                session.store_pattern(name, domain, lang, signature, template, variables, confidence, tags)?;
+            let pattern = session.store_pattern(
+                name, domain, lang, signature, template, variables, confidence, tags,
+            )?;
 
             if json {
                 println!("{}", serde_json::to_string_pretty(&pattern)?);
@@ -112,7 +117,10 @@ pub fn run(args: PatternArgs, data_dir: &str, json: bool) -> Result<()> {
             } else {
                 println!("Found {} pattern(s):", results.len());
                 for p in &results {
-                    println!("  {} - {} [{}] (confidence: {:.2})", p.id, p.name, p.domain, p.confidence);
+                    println!(
+                        "  {} - {} [{}] (confidence: {:.2})",
+                        p.id, p.name, p.domain, p.confidence
+                    );
                 }
             }
         }
@@ -163,7 +171,11 @@ pub fn run(args: PatternArgs, data_dir: &str, json: bool) -> Result<()> {
             let confidence = v["confidence"].as_f64().unwrap_or(0.5);
             let tags: Vec<String> = v["tags"]
                 .as_array()
-                .map(|a| a.iter().filter_map(|t| t.as_str().map(String::from)).collect())
+                .map(|a| {
+                    a.iter()
+                        .filter_map(|t| t.as_str().map(String::from))
+                        .collect()
+                })
                 .unwrap_or_default();
 
             let sig_name = v["signature"]["name"].as_str().unwrap_or(name);
@@ -178,13 +190,17 @@ pub fn run(args: PatternArgs, data_dir: &str, json: bool) -> Result<()> {
                 })
                 .unwrap_or_default();
 
-            let pattern =
-                session.store_pattern(name, domain, lang, signature, template, variables, confidence, tags)?;
+            let pattern = session.store_pattern(
+                name, domain, lang, signature, template, variables, confidence, tags,
+            )?;
 
             if json {
                 println!("{}", serde_json::to_string_pretty(&pattern)?);
             } else {
-                println!("Imported pattern: {} ({}) from {}", pattern.name, pattern.id, file);
+                println!(
+                    "Imported pattern: {} ({}) from {}",
+                    pattern.name, pattern.id, file
+                );
             }
         }
         PatternCommand::Count => {
@@ -197,10 +213,7 @@ pub fn run(args: PatternArgs, data_dir: &str, json: bool) -> Result<()> {
         }
         PatternCommand::Tags => {
             let patterns = session.list_patterns();
-            let mut tags: Vec<String> = patterns
-                .iter()
-                .flat_map(|p| p.tags.clone())
-                .collect();
+            let mut tags: Vec<String> = patterns.iter().flat_map(|p| p.tags.clone()).collect();
             tags.sort();
             tags.dedup();
 
@@ -239,7 +252,10 @@ fn print_pattern(p: &agentic_evolve_core::types::pattern::Pattern) {
     println!("  Domain:     {}", p.domain);
     println!("  Language:   {}", p.language);
     println!("  Confidence: {:.2}", p.confidence);
-    println!("  Usage:      {} (success: {})", p.usage_count, p.success_count);
+    println!(
+        "  Usage:      {} (success: {})",
+        p.usage_count, p.success_count
+    );
     println!("  Version:    {}", p.version);
     println!("  Tags:       {}", p.tags.join(", "));
     println!("  Template:");

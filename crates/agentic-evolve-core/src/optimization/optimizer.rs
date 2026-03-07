@@ -37,7 +37,11 @@ impl PatternOptimizer {
         duplicates
     }
 
-    pub fn find_similar(&self, patterns: &[&Pattern], threshold: f64) -> Vec<(String, String, f64)> {
+    pub fn find_similar(
+        &self,
+        patterns: &[&Pattern],
+        threshold: f64,
+    ) -> Vec<(String, String, f64)> {
         let mut similar = Vec::new();
         for i in 0..patterns.len() {
             for j in (i + 1)..patterns.len() {
@@ -54,8 +58,14 @@ impl PatternOptimizer {
         similar
     }
 
-    pub fn suggest_pruning(&self, patterns: &[&Pattern], min_confidence: f64, min_uses: u64) -> Vec<String> {
-        patterns.iter()
+    pub fn suggest_pruning(
+        &self,
+        patterns: &[&Pattern],
+        min_confidence: f64,
+        min_uses: u64,
+    ) -> Vec<String> {
+        patterns
+            .iter()
             .filter(|p| p.confidence < min_confidence && p.usage_count < min_uses)
             .map(|p| p.id.as_str().to_string())
             .collect()
@@ -80,8 +90,11 @@ fn template_similarity(a: &str, b: &str) -> f64 {
     let a_lines: Vec<&str> = a.lines().collect();
     let b_lines: Vec<&str> = b.lines().collect();
     let max_lines = a_lines.len().max(b_lines.len());
-    if max_lines == 0 { return 1.0; }
-    let matching = a_lines.iter()
+    if max_lines == 0 {
+        return 1.0;
+    }
+    let matching = a_lines
+        .iter()
         .zip(b_lines.iter())
         .filter(|(a, b)| a.trim() == b.trim())
         .count();

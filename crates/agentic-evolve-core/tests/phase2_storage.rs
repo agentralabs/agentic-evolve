@@ -9,7 +9,15 @@ use agentic_evolve_core::types::pattern::{FunctionSignature, Language, Pattern};
 
 fn make_pattern(name: &str, domain: &str) -> Pattern {
     let sig = FunctionSignature::new(name, Language::Rust);
-    Pattern::new(name, domain, Language::Rust, sig, "fn test() {}", vec![], 0.8)
+    Pattern::new(
+        name,
+        domain,
+        Language::Rust,
+        sig,
+        "fn test() {}",
+        vec![],
+        0.8,
+    )
 }
 
 fn make_pattern_with_tag(name: &str, domain: &str, tag: &str) -> Pattern {
@@ -21,7 +29,15 @@ fn make_pattern_with_tag(name: &str, domain: &str, tag: &str) -> Pattern {
 fn make_pattern_with_return(name: &str, domain: &str, ret: &str) -> Pattern {
     let mut sig = FunctionSignature::new(name, Language::Rust);
     sig.return_type = Some(ret.to_string());
-    Pattern::new(name, domain, Language::Rust, sig, "fn test() -> T {}", vec![], 0.8)
+    Pattern::new(
+        name,
+        domain,
+        Language::Rust,
+        sig,
+        "fn test() -> T {}",
+        vec![],
+        0.8,
+    )
 }
 
 // ===========================================================================
@@ -48,7 +64,10 @@ fn store_save_and_get() {
 fn store_get_not_found() {
     let store = PatternStore::new();
     let result = store.get("nonexistent");
-    assert!(matches!(result.unwrap_err(), EvolveError::PatternNotFound(_)));
+    assert!(matches!(
+        result.unwrap_err(),
+        EvolveError::PatternNotFound(_)
+    ));
 }
 
 #[test]
@@ -108,7 +127,9 @@ fn store_search_by_name() {
 #[test]
 fn store_search_by_tag() {
     let mut store = PatternStore::new();
-    store.save(&make_pattern_with_tag("t1", "web", "serde")).unwrap();
+    store
+        .save(&make_pattern_with_tag("t1", "web", "serde"))
+        .unwrap();
     store.save(&make_pattern("t2", "cli")).unwrap();
     let results = store.search("serde");
     assert_eq!(results.len(), 1);

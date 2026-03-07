@@ -54,11 +54,21 @@ impl PatternIndex {
 
     pub fn remove(&mut self, pattern: &Pattern) {
         let id = pattern.id.as_str();
-        self.by_name.values_mut().for_each(|s| { s.remove(id); });
-        self.by_domain.values_mut().for_each(|s| { s.remove(id); });
-        self.by_language.values_mut().for_each(|s| { s.remove(id); });
-        self.by_tag.values_mut().for_each(|s| { s.remove(id); });
-        self.by_return_type.values_mut().for_each(|s| { s.remove(id); });
+        self.by_name.values_mut().for_each(|s| {
+            s.remove(id);
+        });
+        self.by_domain.values_mut().for_each(|s| {
+            s.remove(id);
+        });
+        self.by_language.values_mut().for_each(|s| {
+            s.remove(id);
+        });
+        self.by_tag.values_mut().for_each(|s| {
+            s.remove(id);
+        });
+        self.by_return_type.values_mut().for_each(|s| {
+            s.remove(id);
+        });
     }
 
     pub fn find_by_name(&self, name: &str) -> Vec<String> {

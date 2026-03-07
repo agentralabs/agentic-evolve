@@ -6,7 +6,9 @@ use tokio::sync::Mutex;
 use serde::Deserialize;
 use serde_json::{json, Value};
 
-use agentic_evolve_core::types::pattern::{FunctionSignature, Language, ParamSignature, Visibility};
+use agentic_evolve_core::types::pattern::{
+    FunctionSignature, Language, ParamSignature, Visibility,
+};
 
 use crate::session::SessionManager;
 use crate::types::{McpError, McpResult, ToolCallResult, ToolDefinition};

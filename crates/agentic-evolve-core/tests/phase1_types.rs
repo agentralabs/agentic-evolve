@@ -204,7 +204,15 @@ fn function_signature_creation() {
 
 fn make_test_pattern(name: &str, domain: &str) -> Pattern {
     let sig = FunctionSignature::new(name, Language::Rust);
-    Pattern::new(name, domain, Language::Rust, sig, "fn {{NAME}}() {}", vec![], 0.9)
+    Pattern::new(
+        name,
+        domain,
+        Language::Rust,
+        sig,
+        "fn {{NAME}}() {}",
+        vec![],
+        0.9,
+    )
 }
 
 #[test]

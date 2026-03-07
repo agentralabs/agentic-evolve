@@ -41,8 +41,10 @@ pub fn run(args: StatsArgs, data_dir: &str, json: bool) -> Result<()> {
             let mut domains: Vec<String> = patterns.iter().map(|p| p.domain.clone()).collect();
             domains.sort();
             domains.dedup();
-            let mut languages: Vec<String> =
-                patterns.iter().map(|p| p.language.as_str().to_string()).collect();
+            let mut languages: Vec<String> = patterns
+                .iter()
+                .map(|p| p.language.as_str().to_string())
+                .collect();
             languages.sort();
             languages.dedup();
 

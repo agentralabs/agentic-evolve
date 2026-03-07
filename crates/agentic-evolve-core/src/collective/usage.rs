@@ -26,10 +26,13 @@ impl UsageTracker {
 
     pub fn record_use(&mut self, pattern_id: &str, domain: &str, success: bool) {
         let now = chrono::Utc::now().timestamp();
-        let record = self.records.entry(pattern_id.to_string()).or_insert_with(|| UsageRecord {
-            first_used: now,
-            ..Default::default()
-        });
+        let record = self
+            .records
+            .entry(pattern_id.to_string())
+            .or_insert_with(|| UsageRecord {
+                first_used: now,
+                ..Default::default()
+            });
         record.total_uses += 1;
         if success {
             record.successful_uses += 1;
@@ -46,7 +49,11 @@ impl UsageTracker {
 
     pub fn success_rate(&self, pattern_id: &str) -> f64 {
         self.records.get(pattern_id).map_or(0.0, |r| {
-            if r.total_uses == 0 { 0.0 } else { r.successful_uses as f64 / r.total_uses as f64 }
+            if r.total_uses == 0 {
+                0.0
+            } else {
+                r.successful_uses as f64 / r.total_uses as f64
+            }
         })
     }
 
