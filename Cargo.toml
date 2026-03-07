@@ -1,0 +1,25 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/agentic-evolve-core",
+    "crates/agentic-evolve-mcp",
+    "crates/agentic-evolve-cli",
+    "crates/agentic-evolve-ffi",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/agentralabs/agentic-evolve"
+authors = ["Agentra Labs <contact@agentralabs.tech>"]
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.35", features = ["full"] }
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+tempfile = "3"
+agentic-sdk = { version = "0.2.0", path = "../agentic-sdk" }
+agentic-evolve-core = { path = "crates/agentic-evolve-core" }

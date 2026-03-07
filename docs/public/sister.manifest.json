@@ -1,0 +1,32 @@
+{
+  "key": "evolve",
+  "name": "AgenticEvolve",
+  "include_landing": true,
+  "page_ids": [
+    "overview",
+    "quickstart",
+    "installation",
+    "command-surface",
+    "experience-with-vs-without",
+    "runtime-install-sync",
+    "concepts",
+    "api-reference",
+    "file-format",
+    "rust-api",
+    "benchmarks",
+    "faq",
+    "integration-guide",
+    "architecture",
+    "cli-reference",
+    "configuration",
+    "ffi-reference",
+    "mcp-tools",
+    "mcp-resources",
+    "mcp-prompts",
+    "troubleshooting",
+    "primary-problem-coverage",
+    "initial-problem-coverage",
+    "playbooks-agent-integration"
+  ],
+  "slug_by_id": {}
+}

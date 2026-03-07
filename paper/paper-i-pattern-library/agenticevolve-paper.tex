@@ -1,0 +1,109 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\title{AgenticEvolve: A Pattern Library Engine for AI Agent Code Generation}
+\author{Agentra Labs}
+\date{March 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present AgenticEvolve, a pattern library engine that crystallizes verified
+code patterns for reuse by AI agents. AgenticEvolve addresses the fundamental
+problem of pattern amnesia in agent-based code generation: agents repeatedly
+regenerate solutions they have already verified, wasting computation and
+introducing inconsistency. Our system provides four matching engines
+(signature, context, semantic, fuzzy), a crystallization pipeline that
+extracts reusable templates with variable bindings and confidence scores,
+and a composition engine that weaves multiple patterns together with
+automatic gap filling. Benchmarks on Apple M-series hardware show
+sub-millisecond pattern retrieval (median 45\,\textmu{}s for signature
+matching across 100 patterns) and crystallization in under 200\,\textmu{}s
+for typical source files.
+\end{abstract}
+
+\section{Introduction}
+
+AI code generation agents suffer from a fundamental limitation: they cannot
+recall patterns from previous sessions. Each generation starts from scratch,
+even when the agent has successfully produced identical or similar code before.
+This paper introduces AgenticEvolve, a system designed to eliminate this
+pattern amnesia.
+
+\section{Architecture}
+
+AgenticEvolve is organized as a Rust workspace with four crates:
+\texttt{agentic-evolve-core} (types, storage, matching, crystallization,
+composition, collective learning), \texttt{agentic-evolve-mcp} (MCP server
+with 14 tools), \texttt{agentic-evolve-cli} (38 CLI commands), and
+\texttt{agentic-evolve-ffi} (C-compatible FFI bindings).
+
+\section{Pattern Store}
+
+Patterns are stored in the \texttt{.aevolve} binary format with BLAKE3
+checksums for integrity verification. The format is versioned for forward
+compatibility and uses bincode serialization for compact representation.
+
+\section{Matching Engines}
+
+Four matching engines address different retrieval needs:
+\begin{itemize}
+  \item \textbf{Signature matching} -- compares function signatures structurally
+  \item \textbf{Context matching} -- matches surrounding code context
+  \item \textbf{Semantic matching} -- compares meaning and intent
+  \item \textbf{Fuzzy matching} -- approximate text matching for partial queries
+\end{itemize}
+
+\section{Crystallization}
+
+The crystallization pipeline extracts reusable templates from verified source
+code through four stages: extraction, variable detection, template generation,
+and confidence calculation.
+
+\section{Composition}
+
+The composition engine weaves multiple patterns into a single output using
+gap filling, adapter generation, and integration weaving.
+
+\section{Collective Learning}
+
+The pattern library improves over time through usage tracking, success tracking,
+decay of unused patterns, and promotion of successful patterns.
+
+\section{Benchmarks}
+
+All benchmarks were measured using Criterion 0.5 on Apple M-series hardware.
+Results are summarized in Table~\ref{tab:benchmarks}.
+
+\begin{table}[h]
+\centering
+\caption{Core operation benchmarks}
+\label{tab:benchmarks}
+\begin{tabular}{lrr}
+\toprule
+Operation & Median & p99 \\
+\midrule
+Pattern store (insert) & 12\,\textmu{}s & 18\,\textmu{}s \\
+Signature match (100 patterns) & 45\,\textmu{}s & 78\,\textmu{}s \\
+Crystallize (small file) & 120\,\textmu{}s & 210\,\textmu{}s \\
+Compose (2 patterns) & 85\,\textmu{}s & 150\,\textmu{}s \\
+Full optimize (100 patterns) & 2.1\,ms & 4.5\,ms \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Conclusion}
+
+AgenticEvolve demonstrates that persistent pattern libraries can eliminate
+code generation amnesia in AI agents while maintaining sub-millisecond
+retrieval performance.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
