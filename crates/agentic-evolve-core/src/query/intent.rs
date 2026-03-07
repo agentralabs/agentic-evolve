@@ -5,11 +5,12 @@ use serde::{Deserialize, Serialize};
 /// The level of detail a query should return.
 ///
 /// Defaults to `IdsOnly` to be token-conservative.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
 pub enum ExtractionIntent {
     /// Just check existence — returns a boolean.
     Exists,
     /// Return only identifiers.
+    #[default]
     IdsOnly,
     /// Return a compact summary (name, id, key metadata).
     Summary,
@@ -17,12 +18,6 @@ pub enum ExtractionIntent {
     Fields,
     /// Return the full object.
     Full,
-}
-
-impl Default for ExtractionIntent {
-    fn default() -> Self {
-        Self::IdsOnly
-    }
 }
 
 impl ExtractionIntent {
