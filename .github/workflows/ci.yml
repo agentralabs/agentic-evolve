@@ -45,5 +45,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Clone agentic-sdk (sibling dependency)
         run: git clone --depth 1 https://github.com/agentralabs/agentic-sdk.git ../agentic-sdk
+      - name: Install command guardrails
+        run: bash scripts/check-install-commands.sh
       - name: Canonical sister guardrails
         run: bash scripts/check-canonical-sister.sh
+      - name: Runtime hardening guardrails
+        run: bash scripts/check-runtime-hardening.sh
+      - name: Primary problem regression
+        run: bash scripts/test-primary-problems.sh
