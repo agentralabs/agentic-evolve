@@ -59,6 +59,10 @@ docs/VISION-*.md
 crates/agentic-evolve-mcp/docs/
 crates/agentic-evolve-mcp/scripts/
 
+# Internal / not for public repo
+CLAUDE.md
+sister.manifest.json
+
 # Claude Code
 .claude/
 .agentra/
