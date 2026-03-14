@@ -10,6 +10,7 @@ use crate::session::SessionManager;
 use crate::tools::ToolRegistry;
 use crate::types::*;
 
+use super::compact;
 use super::negotiation::NegotiatedCapabilities;
 use super::validator::validate_request;
 
@@ -111,7 +112,7 @@ impl ProtocolHandler {
 
     async fn handle_notification(&self, notification: JsonRpcNotification) {
         match notification.method.as_str() {
-            "initialized" => {
+            "initialized" | "notifications/initialized" => {
                 let mut caps = self.capabilities.lock().await;
                 if let Err(e) = caps.mark_initialized() {
                     tracing::error!("Failed to mark initialized: {e}");
@@ -146,8 +147,13 @@ impl ProtocolHandler {
     }
 
     async fn handle_tools_list(&self) -> McpResult<Value> {
+        let tools = if compact::is_compact_mode() {
+            compact::compact_tool_definitions()
+        } else {
+            ToolRegistry::list_tools()
+        };
         let result = ToolListResult {
-            tools: ToolRegistry::list_tools(),
+            tools,
             next_cursor: None,
         };
         serde_json::to_value(result).map_err(|e| McpError::InternalError(e.to_string()))
@@ -160,15 +166,27 @@ impl ProtocolHandler {
             .map_err(|e| McpError::InvalidParams(e.to_string()))?
             .ok_or_else(|| McpError::InvalidParams("Tool call params required".to_string()))?;
 
+        // Normalize compact facade calls to underlying tool names.
+        let (tool_name, arguments) = if compact::is_compact_facade(&call_params.name) {
+            match compact::normalize_compact_call(&call_params.name, &call_params.arguments) {
+                Some((real_name, real_args)) => (real_name, real_args),
+                None => {
+                    return Err(McpError::InvalidParams(
+                        "Invalid operation for compact facade".to_string(),
+                    ));
+                }
+            }
+        } else {
+            (call_params.name, call_params.arguments)
+        };
+
         // Classify errors: protocol errors (ToolNotFound etc.) become JSON-RPC errors;
         // tool execution errors become isError: true.
-        let result =
-            match ToolRegistry::call(&call_params.name, call_params.arguments, &self.session).await
-            {
-                Ok(r) => r,
-                Err(e) if e.is_protocol_error() => return Err(e),
-                Err(e) => ToolCallResult::error(e.to_string()),
-            };
+        let result = match ToolRegistry::call(&tool_name, arguments, &self.session).await {
+            Ok(r) => r,
+            Err(e) if e.is_protocol_error() => return Err(e),
+            Err(e) => ToolCallResult::error(e.to_string()),
+        };
 
         serde_json::to_value(result).map_err(|e| McpError::InternalError(e.to_string()))
     }
