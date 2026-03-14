@@ -21,5 +21,5 @@ tokio = { version = "1.35", features = ["full"] }
 chrono = { version = "0.4", features = ["serde"] }
 tracing = "0.1"
 tempfile = "3"
-agentic-sdk = { version = "0.2.0", path = "../agentic-sdk" }
-agentic-evolve-core = { path = "crates/agentic-evolve-core" }
+agentic-sdk = "0.2.0"
+agentic-evolve-core = { path = "crates/agentic-evolve-core", version = "0.1.0" }
